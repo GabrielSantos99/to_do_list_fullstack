@@ -65,7 +65,7 @@ npm run dev
 ### 4. Acesse a aplicação
 Abra http://localhost:5173 no navegador.
 
-✅ Funcionalidades já implementadas
+### ✅ Funcionalidades já implementadas
 Criar tarefa
 
 Listar tarefas
@@ -76,12 +76,12 @@ Deletar tarefa
 
 Interface estilizada com Tailwind
 
-🛠️ Em desenvolvimento
+### 🛠️ Em desenvolvimento
 Filtrar por status
 
 Autenticação de usuários
 
 Organização por colunas (Kanban-style)
 
-📌 Observações
+### 📌 Observações
 Esse projeto está em desenvolvimento contínuo com o objetivo de aprender e aplicar boas práticas em aplicações fullstack modernas.
