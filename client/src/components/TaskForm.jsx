@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 
-export default function TaskForm({onTaskCreated}) {
+export default function TaskForm({ onTaskCreated, editingTask, clearEditingTask }) {
     const [taskData, setTaskData] = useState({
         title: '',
         description: '',
@@ -15,7 +15,7 @@ export default function TaskForm({onTaskCreated}) {
             try {
                 const response = await api.get('/statuses');
                 setStatusOptions(response.data);
-                if (response.data.length > 0) {
+                if (!editingTask && response.data.length > 0) {
                     setTaskData(prev => ({
                         ...prev,
                         status:response.data[0]
@@ -26,7 +26,23 @@ export default function TaskForm({onTaskCreated}) {
             }
         };
         fetchStatuses();
-    }, []);
+    }, [editingTask]);
+
+    useEffect(() => {
+        if (editingTask) {
+          setTaskData({
+            title: editingTask.title,
+            description: editingTask.description,
+            status: editingTask.status,
+          });
+        } else {
+          setTaskData({
+            title: '',
+            description: '',
+            status: statusOptions[0] || '',
+          });
+        }
+      }, [editingTask, statusOptions]);
 
     const handleInput = async (e) => {
         const { name, value } = e.target;
@@ -42,7 +58,12 @@ export default function TaskForm({onTaskCreated}) {
         if (!taskData.title.trim()) return;
 
         try {
-            await api.post('/', taskData);
+            if (editingTask) {
+                await api.put(`/${editingTask.id}`, taskData);
+                clearEditingTask();
+            } else {
+                await api.post('/', taskData);
+            }
             setTaskData({
                 title: '',
                 description: '',
@@ -55,32 +76,28 @@ export default function TaskForm({onTaskCreated}) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-2xl shadow-md max-w-xl mx-auto mb-6 space-y-4">
-          <h2 className="text-2xl font-bold text-gray-700">Nova Tarefa</h2>
-    
+        <form onSubmit={handleSubmit} className="bg-white p-4 rounded-2xl shadow-md mb-6 space-y-4">
           <input
             type="text"
             name="title"
             placeholder="Título"
             value={taskData.title}
             onChange={handleInput}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border border-gray-300 rounded"
           />
-    
           <input
             type="text"
             name="description"
-            placeholder="Descrição da tarefa"
+            placeholder="Descrição"
             value={taskData.description}
             onChange={handleInput}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border border-gray-300 rounded"
           />
-    
           <select
             name="status"
             value={taskData.status}
             onChange={handleInput}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-black"
+            className="w-full p-2 border border-gray-300 rounded"
           >
             {statusOptions.map((status) => (
               <option key={status} value={status}>
@@ -88,13 +105,20 @@ export default function TaskForm({onTaskCreated}) {
               </option>
             ))}
           </select>
-    
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-          >
-            Adicionar Tarefa
-          </button>
+          <div className="flex gap-2">
+            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
+              {editingTask ? "Atualizar" : "Adicionar"}
+            </button>
+            {editingTask && (
+              <button
+                type="button"
+                onClick={clearEditingTask}
+                className="bg-gray-300 px-4 py-2 rounded"
+              >
+                Cancelar
+              </button>
+            )}
+          </div>
         </form>
-      );
+    );
 }
