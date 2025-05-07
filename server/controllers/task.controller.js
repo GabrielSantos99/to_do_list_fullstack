@@ -2,8 +2,17 @@ const taskService = require('../services/task.service')
 
 exports.getAllTasks = async (req, res, next) => {
     try {
-        const tasks = await taskService.getAllTasks()
+        const tasks = await taskService.getAllTasks();
         res.json(tasks);
+    } catch (err) {
+        next(err);
+    }
+}
+
+exports.getTask = async (req, res, next) => {
+    try {
+        const task = await taskService.getTask(req.params.id);
+        res.json(task);
     } catch (err) {
         next(err);
     }

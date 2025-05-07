@@ -12,6 +12,12 @@ exports.getAllTasks = async () => {
     return await prisma.task.findMany({ orderBy: {createdAt: 'desc'} });
 }
 
+exports.getTask = async (id) => {
+    return await prisma.task.findUnique({
+        where: { id: Number(id) },
+    });
+}
+
 // CRUD de tarefas
 exports.createTask = async (data) => {
     const validated = taskSchema.parse(data);
