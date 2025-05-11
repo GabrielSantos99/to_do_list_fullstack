@@ -8,13 +8,22 @@ const taskSchema = z.object({
     status: z.enum(['Pending', 'InProgress', 'Done']).optional()
 });
 
-exports.getAllTasks = async () => {
-    return await prisma.task.findMany({ orderBy: {createdAt: 'desc'} });
-}
+const searchTermSchema = z.object({
+    searchTerm: z.string().optional().default(''),
+});
 
-exports.getTask = async (id) => {
-    return await prisma.task.findUnique({
-        where: { id: Number(id) },
+exports.getAllTasks = async (query) => {
+    const validated = searchTermSchema.parse(query);
+    const { searchTerm } = validated;
+
+    return await prisma.task.findMany({
+        where: {
+            OR: [
+                {title: {contains: searchTerm, mode: 'insensitive'}},
+                {description: {contains: searchTerm, mode: 'insensitive'}},
+            ]
+        }},
+        { orderBy: {createdAt: 'desc'} 
     });
 }
 
