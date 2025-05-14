@@ -10,4 +10,14 @@ exports.register = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-}
+};
+
+exports.login = async (req, res, next) => {
+    try {
+        const result = await userService.loginUser(req.body);
+        res.json(result);
+    } catch (err) {
+        res.status(401).json({ error: err.message });
+    }
+};
+
