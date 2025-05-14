@@ -7,7 +7,7 @@ export default function TaskList({ onTaskDeleted, onEdit, reloadTrigger }) {
   
     const fetchTasks = async () => {
       try {
-        const response = await api.get('/', {
+        const response = await api.get('tasks/', {
           params: { searchTerm }
         });
         setTasks(response.data);
@@ -18,7 +18,7 @@ export default function TaskList({ onTaskDeleted, onEdit, reloadTrigger }) {
   
     const deleteTask = async (id) => {
       try {
-        await api.delete(`/${id}`);
+        await api.delete(`tasks/${id}`);
         onTaskDeleted();
       } catch (err) {
         console.error("Erro ao excluir tarefa: ", err);

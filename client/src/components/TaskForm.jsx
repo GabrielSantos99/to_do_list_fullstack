@@ -13,7 +13,7 @@ export default function TaskForm({ onTaskCreated, editingTask, clearEditingTask 
     useEffect(() => {
         const fetchStatuses = async () => {
             try {
-                const response = await api.get('/statuses');
+                const response = await api.get('tasks/statuses');
                 setStatusOptions(response.data);
                 if (!editingTask && response.data.length > 0) {
                     setTaskData(prev => ({
@@ -59,10 +59,10 @@ export default function TaskForm({ onTaskCreated, editingTask, clearEditingTask 
 
         try {
             if (editingTask) {
-                await api.put(`/${editingTask.id}`, taskData);
+                await api.put(`tasks/${editingTask.id}`, taskData);
                 clearEditingTask();
             } else {
-                await api.post('/', taskData);
+                await api.post('tasks/', taskData);
             }
             setTaskData({
                 title: '',
