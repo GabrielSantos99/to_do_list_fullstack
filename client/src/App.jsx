@@ -3,9 +3,11 @@ import './App.css';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
 import LoginForm from './components/LoginForm';
+import RegisterForm from './components/RegisterForm';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
   const [reloadTrigger, setReloadTrigger] = useState(0);
   const [editingTask, setEditingTask] = useState(null);
 
@@ -24,12 +26,18 @@ function App() {
     setIsAuthenticated(false);
   }
 
+  const toggleToRegister = () => {
+    setShowRegister(true);
+  }
+
   const refreshTasks = () => {
     setReloadTrigger(prev => prev + 1);
   };
 
   if (!isAuthenticated) {
-    return <LoginForm onLogin={handleLogin}/>
+    return showRegister
+    ? <RegisterForm onRegister={() => {setShowRegister(false)}}/>
+    : <LoginForm onLogin={handleLogin} toggleToRegister={toggleToRegister}/>
   }
 
   return (

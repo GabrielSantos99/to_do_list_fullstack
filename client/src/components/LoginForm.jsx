@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../services/api";
 
-export default function LoginForm({ onLogin }) {
+export default function LoginForm({ onLogin, toggleToRegister }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -40,6 +40,16 @@ export default function LoginForm({ onLogin }) {
             <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
                 Entrar
             </button>
+            <p className="text-sm text-center py-2">
+                Não tem conta? {' '}
+                <button
+                    type="button"
+                    onClick={toggleToRegister}
+                    className="text-blue-500 hover:underline"
+                >
+                    Cadastre-se
+                </button>
+            </p>
         </form>
     );
 }
