@@ -11,8 +11,7 @@ export default function LoginForm({ onLogin }) {
         try {
             const res = await api.post('users/login', { email, password });
             const token = res.data.token;
-            localStorage.setItem('token', token);
-            onLogin();
+            onLogin(token);
         } catch (err) {
             setError('Login falhou. Verifique suas credenciais.');
         }
