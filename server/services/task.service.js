@@ -12,12 +12,13 @@ const searchTermSchema = z.object({
     searchTerm: z.string().optional().default(''),
 });
 
-exports.getAllTasks = async (query) => {
+exports.getAllTasks = async (userId, query) => {
     const validated = searchTermSchema.parse(query);
     const { searchTerm } = validated;
 
     return await prisma.task.findMany({
         where: {
+            userId,
             OR: [
                 {title: {contains: searchTerm, mode: 'insensitive'}},
                 {description: {contains: searchTerm, mode: 'insensitive'}},
@@ -25,36 +26,50 @@ exports.getAllTasks = async (query) => {
         }},
         { orderBy: {createdAt: 'desc'} 
     });
-}
+};
 
 // CRUD de tarefas
-exports.createTask = async (data) => {
+exports.createTask = async (data, userId) => {
     const validated = taskSchema.parse(data);
-    return await prisma.task.create({ data: validated });
-}
+    return await prisma.task.create({
+        data: {
+            ...validated,
+            userId,
+        } 
+    });
+};
 
-exports.updateTask = async (id, data) => {
+exports.updateTask = async (id, data, userId) => {
     const validated = taskSchema.parse(data);
-    return await prisma.task.update({
-        where: { id: Number(id) },
+    return await prisma.task.updateMany({
+        where: {
+            id: Number(id),
+            userId,
+        },
         data: validated,
     });
-}
+};
 
-exports.deleteTask = async (id) => {
-    return await prisma.task.delete({
-        where: {id: Number(id)},
+exports.deleteTask = async (id, userId) => {
+    return await prisma.task.deleteMany({
+        where: {
+            id: Number(id),
+            userId,
+        },
     });
-}
+};
 
 // Atalho para marcar como concluida a tarefa
-exports.markAsDone = async (id) => {
+exports.markAsDone = async (id, userId) => {
     return await prisma.task.update({
-        where: { id: Number(id) },
+        where: {
+            id: Number(id),
+            userId,
+        },
         data: { status: "Done" },
     })
-}
+};
 
 exports.getStatusOptions = () => {
     return Object.values(TaskStatus);
-}
+};

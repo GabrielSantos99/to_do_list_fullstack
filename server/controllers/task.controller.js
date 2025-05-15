@@ -2,7 +2,7 @@ const taskService = require('../services/task.service')
 
 exports.getAllTasks = async (req, res, next) => {
     try {
-        const tasks = await taskService.getAllTasks(req.query);
+        const tasks = await taskService.getAllTasks(req.user.id, req.query);
         res.json(tasks);
     } catch (err) {
         next(err);
@@ -11,7 +11,7 @@ exports.getAllTasks = async (req, res, next) => {
 
 exports.createTask = async (req, res, next) => {
     try {
-        const task = await taskService.createTask(req.body);
+        const task = await taskService.createTask(req.body, req.user.id);
         res.status(201).json(task);
     } catch (err) {
         next(err);
@@ -20,7 +20,7 @@ exports.createTask = async (req, res, next) => {
 
 exports.updateTask = async (req, res, next) => {
     try {
-        const task = await taskService.updateTask(req.params.id, req.body);
+        const task = await taskService.updateTask(req.params.id, req.body, req.user.id);
         res.json(task);
     } catch (err) {
         next(err);
@@ -29,7 +29,7 @@ exports.updateTask = async (req, res, next) => {
 
 exports.deleteTask = async (req, res, next) => {
     try {
-        await taskService.deleteTask(req.params.id);
+        await taskService.deleteTask(req.params.id, req.user.id);
         res.status(204).send();
     } catch (err) {
         next(err);
@@ -38,7 +38,7 @@ exports.deleteTask = async (req, res, next) => {
 
 exports.markAsDone = async (req, res, next) => {
     try {
-        const task = await taskService.markAsDone(req.params.id);
+        const task = await taskService.markAsDone(req.params.id, req.user.id);
         res.json(task);
     } catch (err) {
         next(err);
