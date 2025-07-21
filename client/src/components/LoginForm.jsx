@@ -1,17 +1,29 @@
 import { useState } from "react";
-import api from "../services/api";
+import { useAuth } from "../hooks/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
-export default function LoginForm({ onLogin, toggleToRegister }) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+export default function LoginForm({ toggleToRegister }) {
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+    });
     const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const authProvider = useAuth();
+
+    const handleInput = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        })); 
+    } ;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await api.post('users/login', { email, password });
-            const token = res.data.token;
-            onLogin(token);
+            authProvider.login(formData);
+            navigate("/tasks");
         } catch (err) {
             setError('Login falhou. Verifique suas credenciais.');
         }
@@ -23,17 +35,17 @@ export default function LoginForm({ onLogin, toggleToRegister }) {
             {error && <p className="text-red-500">{error}</p>}
             <input
                 type="email"
+                name="email"
                 placeholder="Digite seu E-mail"
-                value={email}
-                onChange={(e) => { setEmail(e.target.value) }}
+                onChange={handleInput}
                 className="border p-2 w-full mb-2"
                 required
             />
             <input
                 type="password"
+                name="password"
                 placeholder="Digite sua senha"
-                value={password}
-                onChange={(e) => { setPassword(e.target.value) }}
+                onChange={handleInput}
                 className="border p-2 w-full mb-2"
                 required
             />

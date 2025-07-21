@@ -71,7 +71,7 @@ export default function TaskForm({ onTaskCreated, editingTask, clearEditingTask 
             });
             onTaskCreated();
         } catch (err) {
-            console.log('Erro ao criar tarefa: ', err);
+            console.error('Erro ao criar tarefa: ', err);
         }
     };
 
@@ -83,21 +83,13 @@ export default function TaskForm({ onTaskCreated, editingTask, clearEditingTask 
             placeholder="Título"
             value={taskData.title}
             onChange={handleInput}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-          <input
-            type="text"
-            name="description"
-            placeholder="Descrição"
-            value={taskData.description}
-            onChange={handleInput}
-            className="w-full p-2 border border-gray-300 rounded"
+            className="flex-1 p-2 border rounded"
           />
           <select
             name="status"
             value={taskData.status}
             onChange={handleInput}
-            className="w-full p-2 border border-gray-300 rounded"
+            className="flex-1 p-2 border rounded"
           >
             {statusOptions.map((status) => (
               <option key={status} value={status}>
@@ -105,8 +97,16 @@ export default function TaskForm({ onTaskCreated, editingTask, clearEditingTask 
               </option>
             ))}
           </select>
+          <input
+            type="text"
+            name="description"
+            placeholder="Descrição"
+            value={taskData.description}
+            onChange={handleInput}
+            className="w-full p-2 border rounded"
+          />
           <div className="flex gap-2">
-            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
+            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
               {editingTask ? "Atualizar" : "Adicionar"}
             </button>
             {editingTask && (

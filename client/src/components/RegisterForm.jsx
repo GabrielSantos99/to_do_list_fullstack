@@ -29,43 +29,43 @@ export default function RegisterForm({ onRegister }) {
     return (
         <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded shadow">
             <h2 className="text-xl font-bold text-gray-500">Cadastre-se</h2>
-            <p className="text-sm text-gray-400 text-left">
+            <label className="text-sm text-gray-400">
                 Nome:
                 <input
                     type="text"
-                    placeholder="Digite seu nome"
+                    placeholder="Nome completo"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
                     className="w-full p-2 border rounded"
                 />
-            </p>
-            <p className="text-sm text-gray-400 text-left">
+            </label>
+            <label className="text-sm text-gray-400 text-left">
                 Email:
                 <input
                     type="text"
-                    placeholder="Digite seu email"
+                    placeholder="Seu melhor email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
                     className="w-full p-2 border rounded"
                 />
-            </p>
-            <p className="text-sm text-gray-400 text-left">
+            </label>
+            <label className="text-sm text-gray-400 text-left">
                 Senha:
                 <input
                     type="text"
-                    placeholder="Digite sua senha"
+                    placeholder="Senha segura"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
                     className="w-full p-2 border rounded"
                 />
-            </p>
+            </label>
 
             {error && <p className="text-red-500 text-sm">{error}</p>}
 
-            <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+            <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 border-none bg-none">
                 Cadastrar
             </button>
         </form>
