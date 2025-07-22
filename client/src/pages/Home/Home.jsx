@@ -19,10 +19,10 @@ function Home() {
                 </div>
             </header>
             <main>
-                <h1 className="font-bold text-center py-1 text-gray-950">
+                <h1 className="font-bold text-center py-1">
                     Organize suas tarefas com facilidade. Faça login ou crie uma conta para começar.
                 </h1>
-                <p className="text-center py-3 text-gray-950 mb-8">
+                <p className="text-center py-3 mb-8">
                     Não perca tempo e faça seu cadastros, venha para o time se sejá mais produtivo!
                 </p>
                 <Link
