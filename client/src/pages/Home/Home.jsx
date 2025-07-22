@@ -1,7 +1,6 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Home() {
-    const navigate = useNavigate();
     return(
         <div className="">
             <header className="fixed w-full top-0 left-0 bg-slate-100 shadow p-5">
