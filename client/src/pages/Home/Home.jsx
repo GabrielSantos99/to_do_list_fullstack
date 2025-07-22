@@ -19,8 +19,12 @@ function Home() {
                 </div>
             </header>
             <main>
-                <h1 className="font-bold text-center py-1">Organize suas tarefas com facilidade. Faça login ou crie uma conta para começar.</h1>
-                <p className="text-center py-3">Não perca tempo e faça seu cadastros, venha para o time se sejá mais produtivo!</p>
+                <h1 className="font-bold text-center py-1 text-gray-950">
+                    Organize suas tarefas com facilidade. Faça login ou crie uma conta para começar.
+                </h1>
+                <p className="text-center py-3 text-gray-950 mb-8">
+                    Não perca tempo e faça seu cadastros, venha para o time se sejá mais produtivo!
+                </p>
                 <Link
                     to="/register"
                     className="my-2 bg-blue-700 hover:bg-blue-800 text-white p-3 rounded"
