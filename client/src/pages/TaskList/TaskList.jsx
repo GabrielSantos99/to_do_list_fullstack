@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import { useAuth } from "../../hooks/AuthProvider";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function TaskList({ onEdit }) {
     const [tasks, setTasks] = useState([]);
@@ -9,6 +9,7 @@ export default function TaskList({ onEdit }) {
     const [reloadTrigger, setReloadTrigger] = useState(0);
     const authProvider = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const refreshTasks = () => {
       setReloadTrigger(prev => prev + 1);
@@ -38,6 +39,12 @@ export default function TaskList({ onEdit }) {
       authProvider.logout();
       navigate("/");
     };
+
+    const createTask = () => {
+      navigate("/tasks/new", {
+        state: { backgroundLocation: location }
+      });
+    }
   
     useEffect(() => {
       if (searchTerm.trim() === "") return;
@@ -47,7 +54,9 @@ export default function TaskList({ onEdit }) {
     return (
       <div>
         <header className="flex justify-center w-full top-0 left-0 p-4 gap-2">
-          <button className="text-gray-50 bg-blue-500 hover:bg-blue-600">Criar</button>
+          <button
+            onClick={ createTask } 
+            className="text-gray-50 bg-blue-500 hover:bg-blue-600">Criar</button>
           <input
               type="text"
               name="search"
