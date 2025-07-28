@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import api from "../services/api";
-import { useAuth } from "../hooks/AuthProvider";
-import { useNavigate } from "react-router-dom";
+import api from "../../services/api";
+import { useAuth } from "../../hooks/AuthProvider";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function TaskList({ onEdit }) {
     const [tasks, setTasks] = useState([]);
@@ -9,6 +9,7 @@ export default function TaskList({ onEdit }) {
     const [reloadTrigger, setReloadTrigger] = useState(0);
     const authProvider = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const refreshTasks = () => {
       setReloadTrigger(prev => prev + 1);
@@ -38,35 +39,45 @@ export default function TaskList({ onEdit }) {
       authProvider.logout();
       navigate("/");
     };
+
+    const createTask = () => {
+      navigate("/tasks/new", {
+        state: { backgroundLocation: location }
+      });
+    }
   
     useEffect(() => {
+      if (searchTerm.trim() === "") return;
       fetchTasks();
     }, [reloadTrigger, searchTerm]);
   
     return (
       <div>
-        <header className="w-full top-0 left-0">
+        <header className="flex justify-center w-full top-0 left-0 p-4 gap-2">
           <button
-            onClick={logout}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 m-2"
-          >
-            Logout
-          </button>  
-        </header>
-        <div className="bg-white p-6 rounded-2xl shadow-md max-w-xl mb-6 mt-8 space-y-4">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-700 mb-6">
-            To-Do List
-          </h1>
-          <button className="text-slate-950 bg-green-500 hover:bg-green-600">Criar</button>
-          <h2 className="text-2xl font-bold text-gray-700">Minhas Tarefas</h2>
+            onClick={ createTask } 
+            className="text-gray-50 bg-blue-500 hover:bg-blue-600">Criar</button>
           <input
               type="text"
               name="search"
-              placeholder="Buscar por palavra-chave..."
+              placeholder="Buscar"
               value={searchTerm}
               onChange={ (e) => {setSearch(e.target.value)} }
-              className="w-full p-2 border border-gray-300 rounded mb-2"
+              className="w-full p-2 border border-gray-300 rounded m-auto"
           />
+          <button
+            onClick={ logout }
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 m-auto"
+          >
+            Logout
+          </button>
+        </header>
+
+        <div className="bg-white p-6 rounded-2xl shadow-md max-w-md lg:max-w-7xl mb-6 mt-8 space-y-4 m-auto lg:w-3/4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-700 mb-6">
+            To-Do List
+          </h1>
+          <h2 className="text-2xl font-bold text-gray-700">Minhas Tarefas</h2>
           <ul className="text-gray-600 space-y-2">
             {tasks.map((task) => (
               <li key={task.id} className="bg-gray-100 p-4 rounded flex justify-between items-center">

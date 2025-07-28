@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 export default function TaskForm({ onTaskCreated, editingTask, clearEditingTask }) {
     const [taskData, setTaskData] = useState({
@@ -9,6 +10,7 @@ export default function TaskForm({ onTaskCreated, editingTask, clearEditingTask 
     });
 
     const [statusOptions, setStatusOptions] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchStatuses = async () => {
@@ -75,6 +77,10 @@ export default function TaskForm({ onTaskCreated, editingTask, clearEditingTask 
         }
     };
 
+    const closeForm = () => {
+      navigate(-1);
+    };
+
     return (
         <form onSubmit={handleSubmit} className="bg-white p-4 rounded-2xl shadow-md mb-6 space-y-4">
           <input
@@ -109,15 +115,13 @@ export default function TaskForm({ onTaskCreated, editingTask, clearEditingTask 
             <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
               {editingTask ? "Atualizar" : "Adicionar"}
             </button>
-            {editingTask && (
               <button
                 type="button"
-                onClick={clearEditingTask}
+                onClick={ closeForm }
                 className="bg-gray-300 px-4 py-2 rounded"
               >
                 Cancelar
               </button>
-            )}
           </div>
         </form>
     );
